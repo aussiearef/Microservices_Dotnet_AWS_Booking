@@ -3,6 +3,7 @@ using System.Net;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Booking.Command.Models;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(x =>
@@ -20,7 +21,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 
-app.MapGet("/book", async (BookingRequest request) =>
+app.MapGet("/book", async ([FromBody] BookingRequest request) =>
 {
     var token = request.IdToken;
     var idTokenDetails = new JwtSecurityToken(token);
