@@ -1,9 +1,18 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Booking.Command.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(x =>
+{
+    x.AddDefaultPolicy(p=>p.
+        AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+    );
+});
 
 var app = builder.Build();
 
@@ -38,6 +47,12 @@ app.MapGet("/book", async (BookingRequest request) =>
     var dbClient = new AmazonDynamoDBClient();
     var dbContext = new DynamoDBContext(dbClient);
     await dbContext.SaveAsync(dto);
+});
+
+// Auxiliary health check endpoint.
+app.MapGet("/", () => new HttpResponseMessage()
+{
+    StatusCode = HttpStatusCode.OK
 });
 
 app.Run();
