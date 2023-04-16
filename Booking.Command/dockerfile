@@ -9,5 +9,9 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /App
 COPY --from=build-env /App/out .
 
+RUN apt update
+RUN apt upgrade
+RUN apt -y install curl
+
 EXPOSE 80
 ENTRYPOINT ["dotnet","Booking.Command.dll"]
