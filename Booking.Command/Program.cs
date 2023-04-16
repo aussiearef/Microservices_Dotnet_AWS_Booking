@@ -18,9 +18,6 @@ builder.Services.AddCors(x =>
 var app = builder.Build();
 
 
-app.UseHttpsRedirection();
-
-
 app.MapGet("/book", async ([FromBody] BookingRequest request) =>
 {
     var token = request.IdToken;
@@ -50,10 +47,8 @@ app.MapGet("/book", async ([FromBody] BookingRequest request) =>
     await dbContext.SaveAsync(dto);
 });
 
-// Auxiliary health check endpoint.
-app.MapGet("/", () => new HttpResponseMessage()
-{
-    StatusCode = HttpStatusCode.OK
-});
+// Auxiliary health checks endpoints.
+app.MapGet("/health", () => new HttpResponseMessage(HttpStatusCode.OK));
+app.MapGet("/", () => new HttpResponseMessage(HttpStatusCode.OK));
 
 app.Run();
