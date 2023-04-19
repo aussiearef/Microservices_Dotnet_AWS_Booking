@@ -11,9 +11,12 @@ builder.Services.AddCors(x =>
     x.AddDefaultPolicy(p =>
         p.AllowAnyOrigin()
             .AllowAnyHeader()
-            .AllowAnyMethod()));
+            .AllowAnyMethod()
+            .WithExposedHeaders("Custom-Header")));
+    
 
 var app = builder.Build();
+app.UseCors();
 
 app.MapPost("/book", async ([FromBody] BookingRequest request) =>
 {
@@ -44,6 +47,7 @@ app.MapPost("/book", async ([FromBody] BookingRequest request) =>
     using var dbContext = new DynamoDBContext(dbClient);
     await dbContext.SaveAsync(dto);
 });
+
 
 app.MapGet("/health", () => new HttpResponseMessage(HttpStatusCode.OK));
 
