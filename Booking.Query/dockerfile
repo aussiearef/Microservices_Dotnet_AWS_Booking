@@ -11,7 +11,7 @@ COPY --from=build-env /App/out ./
 
 RUN apt update
 RUN apt upgrade
-RUN apt install -y cur
+RUN apt install -y curl
 
 EXPOSE 80
 ENTRYPOINT ["dotnet", "Booking.Query.dll"]
